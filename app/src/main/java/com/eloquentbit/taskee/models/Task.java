@@ -35,6 +35,10 @@ public class Task extends RealmObject {
         return _id;
     }
 
+    public void setId(int id) {
+        this._id = id;
+    }
+
     public String getTitle() {
         return title;
     }
