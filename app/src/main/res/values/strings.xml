@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Taskee</string>
+
+    <!-- Task Dialog -->
+
+    <!-- Titles -->
+    <string name="add_dialog_title">New Task</string>
+    <string name="edit_dialog_title">Edit Task</string>
+
+    <!-- Hints -->
+    <string name="hint_task_title">Title</string>
+
+    <!-- Buttons -->
+    <string name="btn_add_task">Add</string>
+    <string name="btn_save_task">Save</string>
+    <string name="btn_delete_task">Delete</string>
+
+    <!-- Messages -->
+    <string name="success_message_task">Task added successfully</string>
+    <string name="error_message_task">Failed to add task</string>
+
+    <!-- SnackBar -->
+    <string name="message_task_completed">Task completed</string>
+    <string name="hint_task_description">Description</string>
+
 </resources>

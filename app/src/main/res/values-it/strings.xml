@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Taskee</string>
+    <string name="add_dialog_title">Nuovo Attività</string>
+    <string name="add_task_header">Aggiungi Attività</string>
+    <string name="btn_add_task">Aggiungi</string>
+    <string name="btn_delete_task">Elimina</string>
+    <string name="btn_save_task">Salva</string>
+    <string name="edit_dialog_title">Modifica Attività</string>
+    <string name="error_message_task">Impossibile aggiungere il task</string>
+    <string name="hint_task">Attività</string>
+    <string name="hint_task_title">Titolo</string>
+    <string name="message_task_completed">Attività completata</string>
+    <string name="success_message_task">Attività aggiunta</string>
+</resources>

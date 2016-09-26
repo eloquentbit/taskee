@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hint_task">Task</string>
+    <string name="add_task_header">Add Task</string>
+    <string name="success_message_task">Task added</string>
+    <string name="error_message_task">Unable to add task</string>
+    <string name="message_task_completed">Task completed</string>
+    <string name="btn_save_task">Save</string>
+    <string name="edit_dialog_title">Edit Task</string>
+    <string name="btn_delete_task">Delete</string>
+</resources>
