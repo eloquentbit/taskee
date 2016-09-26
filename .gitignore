@@ -43,6 +43,7 @@ captures/
 .idea/misc.xml
 .idea/encodings.xml
 .idea/.name
+projectFilesBackup/
 
 # Keystore files
 *.jks
