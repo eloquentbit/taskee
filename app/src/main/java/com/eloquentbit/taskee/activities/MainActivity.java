@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -60,22 +61,29 @@ public class MainActivity extends AppCompatActivity {
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MaterialDialog addTaskDialog = new MaterialDialog.Builder(MainActivity.this)
-                        .title(R.string.add_dialog_title)
-                        .customView(R.layout.fragment_add_task, true)
-                        .positiveText(R.string.btn_add_task)
-                        .negativeText(android.R.string.cancel)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                Task mTask = new Task();
 
+                final MaterialDialog.Builder addDialogBuilder =
+                        buildCustomDialog(R.string.add_dialog_title,
+                                R.layout.fragment_task,
+                                R.string.btn_add_task,
+                                android.R.string.cancel);
+
+                addDialogBuilder.onAny(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        switch (which.name()) {
+                            case "POSITIVE":
+                                Task mTask = new Task();
+                                mTask.setId(Task.getNextId());
                                 mTask.setTitle(edtTitle.getText().toString().trim());
                                 mTask.setDescription(edtDescription.getText().toString().trim());
 
-                                addOrUpdateTask(mTask);
-                            }
-                        }).build();
+                                storeOrUpdateTask(mTask, R.string.success_message_add_task);
+                        }
+                    }
+                });
+
+                MaterialDialog addTaskDialog = addDialogBuilder.build();
 
                 positiveAction = addTaskDialog.getActionButton(DialogAction.POSITIVE);
 
@@ -108,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Load active tasks
-        TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter(this,
+        final TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter(this,
                 realm.where(Task.class)
                         .equalTo("isCompleted", false)
-                        .findAllSortedAsync("_id"));
+                        .findAllSortedAsync(Task.ID));
 
         // Listener for RecyclerView's item in order to edit a task
         adapter.setOnItemClickListener(new TaskRecyclerViewAdapter.OnItemClickListener() {
@@ -120,9 +128,12 @@ public class MainActivity extends AppCompatActivity {
                 final String title = ((TextView) itemView.findViewById(R.id.txt_title)).getText().toString();
 
                 // Build the Edit dialog
-                MaterialDialog.Builder buildDialog = buildDialog();
+                MaterialDialog.Builder editDialogBuilder =
+                        buildCustomDialog(R.string.edit_dialog_title, R.layout.fragment_task,
+                                R.string.btn_save_task, android.R.string.cancel);
+
                 // Configure callback
-                buildDialog.onAny(new MaterialDialog.SingleButtonCallback() {
+                editDialogBuilder.onAny(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         switch (which.name()) {
@@ -133,14 +144,14 @@ public class MainActivity extends AppCompatActivity {
                                 mTask.setTitle(edtTitle.getText().toString().trim());
                                 mTask.setDescription(edtDescription.getText().toString().trim());
 
-                                addOrUpdateTask(mTask);
+                                storeOrUpdateTask(mTask, R.string.success_message_edit_task);
                                 break;
                         }
                     }
                 });
 
                 // Finalize the Edit Dialog
-                final MaterialDialog editDialog = buildDialog.build();
+                final MaterialDialog editTaskDialog = editDialogBuilder.build();
 
                 // Load task to edit and populate Edit Dialog
                 realm.executeTransaction(new Realm.Transaction() {
@@ -148,20 +159,46 @@ public class MainActivity extends AppCompatActivity {
                     public void execute(Realm realm) {
                         Task mTask = realm.where(Task.class).equalTo(Task.TITLE, title)
                                 .findFirst();
+
                         taskId = mTask.getId();
-                        edtTitle = (EditText) editDialog.getCustomView().findViewById(R.id.edt_task_title);
-                        edtDescription = (EditText) editDialog.getCustomView().findViewById(R.id.edt_task_description);
+                        edtTitle = (EditText) editTaskDialog.getCustomView().findViewById(R.id.edt_task_title);
+                        edtDescription = (EditText) editTaskDialog.getCustomView().findViewById(R.id.edt_task_description);
 
                         edtTitle.setText(mTask.getTitle());
                         edtDescription.setText(mTask.getDescription());
                     }
                 });
 
-                editDialog.show();
-
-                //editTask(title);
+                editTaskDialog.show();
             }
         });
+
+        adapter.setOnItemLongClickListener(new TaskRecyclerViewAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View itemView, int position) {
+                //final String title = ((TextView) itemView.findViewById(R.id.txt_title)).getText().toString();
+                final Task mTask = adapter.getData().get(position);
+
+                // Build confirmation dialog
+                new MaterialDialog.Builder(MainActivity.this)
+                        .title(R.string.delete_dialog_title)
+                        .content(R.string.message_delete_task)
+                        .positiveText(R.string.btn_delete_task)
+                        .negativeText(R.string.btn_cancel_operation)
+                        .onAny(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                switch (which.name()) {
+                                    case "POSITIVE":
+                                        deleteTask(mTask.getId(), R.string.success_message_delete_task);
+                                        break;
+                                }
+                            }
+                        })
+                        .show();
+            }
+        });
+
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
@@ -174,28 +211,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void toggleCompleted(final View itemView, final String title, final boolean isCompleted) {
-        final TextView tvTitle = (TextView) itemView;
+    public void toggleCompleted(final Integer taskId) {
+
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(Task.class).equalTo(Task.TITLE, title)
-                        .findFirst().setCompleted(isCompleted);
+                Task mTask = realm.where(Task.class).equalTo(Task.ID, taskId)
+                        .findFirst();
+
+                mTask.setCompleted(!mTask.isCompleted());
+                realm.copyToRealmOrUpdate(mTask);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                if (isCompleted) {
-                    tvTitle.setPaintFlags(tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    Snackbar.make(coordinatorLayout, R.string.message_task_completed, Snackbar.LENGTH_SHORT).show();
-                } else {
-                    tvTitle.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
-                }
+                Snackbar.make(coordinatorLayout, R.string.message_task_completed, Snackbar.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void addOrUpdateTask(final Task task) {
+    public void storeOrUpdateTask(final Task task, final int successMessageResource) {
+
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -204,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Snackbar.make(coordinatorLayout, R.string.success_message_task, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, successMessageResource, Snackbar.LENGTH_SHORT).show();
             }
         }, new Realm.Transaction.OnError() {
             @Override
@@ -221,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        MaterialDialog editTaskDialog = new MaterialDialog.Builder(MainActivity.this)
 //                .title(R.string.edit_dialog_title)
-//                .customView(R.layout.fragment_add_task, true)
+//                .customView(R.layout.fragment_task, true)
 //                .positiveText(R.string.btn_save_task)
 //                .negativeText(R.string.btn_delete_task)
 //                .neutralText(android.R.string.cancel)
@@ -252,29 +288,32 @@ public class MainActivity extends AppCompatActivity {
 //        editTaskDialog.show();
 //    }
 
-    public void deleteTask(final String title) {
+    public void deleteTask(final Integer id, final int successMessageResource) {
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(Task.class).equalTo(Task.TITLE, title)
+                realm.where(Task.class).equalTo(Task.ID, id)
                         .findAll()
                         .deleteAllFromRealm();
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Snackbar.make(coordinatorLayout, "Task deleted", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, successMessageResource, Snackbar.LENGTH_SHORT).show();
             }
         });
     }
 
-    private MaterialDialog.Builder buildDialog() {
+    private MaterialDialog.Builder buildCustomDialog(int titleResource,
+                                                     int customViewResource,
+                                                     int positiveTextResource,
+                                                     int negativeTextResource) {
 
         return new MaterialDialog.Builder(this)
-                .title(R.string.edit_dialog_title)
-                .customView(R.layout.fragment_add_task, true)
-                .positiveText(R.string.btn_save_task)
-                .negativeText(android.R.string.cancel);
+                .title(titleResource)
+                .customView(customViewResource, true)
+                .positiveText(positiveTextResource)
+                .negativeText(negativeTextResource);
     }
 }
