@@ -10,11 +10,13 @@ import io.realm.annotations.Required;
 
 public class Task extends RealmObject {
 
+    public static final String ID = "_id";
     public static final String TITLE = "title";
 
     @Required
     @PrimaryKey
-    private Integer _id = RealmAutoIncrement.getInstance().getNextIdFromModel(Task.class);
+    //private Integer _id = RealmAutoIncrement.getInstance().getNextIdFromModel(Task.class);
+    private Integer _id;
 
     @Required
     private String title;
@@ -69,5 +71,13 @@ public class Task extends RealmObject {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public static Integer getNextId() {
+        return RealmAutoIncrement.getInstance().getNextIdFromModel(Task.class);
+    }
+
+    public String toString() {
+        return (this.getId() + " - " + this.getTitle() + " - " + this.isCompleted());
     }
 }
