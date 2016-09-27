@@ -6,6 +6,7 @@
     <!-- Titles -->
     <string name="add_dialog_title">New Task</string>
     <string name="edit_dialog_title">Edit Task</string>
+    <string name="delete_dialog_title">Delete Task</string>
 
     <!-- Hints -->
     <string name="hint_task_title">Title</string>
@@ -14,10 +15,15 @@
     <string name="btn_add_task">Add</string>
     <string name="btn_save_task">Save</string>
     <string name="btn_delete_task">Delete</string>
+    <string name="btn_cancel_operation">Cancel</string>
 
     <!-- Messages -->
-    <string name="success_message_task">Task added successfully</string>
+    <string name="success_message_add_task">Task added successfully</string>
+    <string name="success_message_edit_task">Task updated successfully</string>
+    <string name="success_message_delete_task">Task deleted successfully</string>
     <string name="error_message_task">Failed to add task</string>
+
+    <string name="message_delete_task">Are you sure you want to delete this task?</string>
 
     <!-- SnackBar -->
     <string name="message_task_completed">Task completed</string>
