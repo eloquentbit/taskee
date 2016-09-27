@@ -23,14 +23,16 @@ public class Task extends RealmObject {
     private String description;
     private boolean isCompleted;
     private Date dueDate;
+    private String priority;
 
     public Task() {}
 
-    public Task(String title, String description, Date dueDate) {
+    public Task(String title, String description, Date dueDate, String priority) {
         this.title = title;
         this.description = description;
         this.isCompleted = false;
         this.dueDate = dueDate;
+        this.priority = priority;
     }
 
     public Integer getId() {
@@ -71,6 +73,14 @@ public class Task extends RealmObject {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     public static Integer getNextId() {
