@@ -24,13 +24,22 @@ public class TaskRecyclerViewAdapter extends
 
     private final MainActivity activity;
     private OnItemClickListener listener;
+    private OnItemLongClickListener longClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
 
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View itemView, int position);
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
+        this.longClickListener = longClickListener;
     }
 
     public TaskRecyclerViewAdapter(MainActivity activity, OrderedRealmCollection<Task> data) {
@@ -48,6 +57,8 @@ public class TaskRecyclerViewAdapter extends
     public void onBindViewHolder(final TaskRecyclerViewAdapter.TaskViewHolder holder, int position) {
         final Task task = getData().get(position);
 
+        Log.d(TAG, task.toString());
+
         holder.tvTitle.setText(task.getTitle());
         holder.cbCompleted.setChecked(task.isCompleted());
         holder.cbCompleted.setOnCheckedChangeListener(null);
@@ -56,10 +67,16 @@ public class TaskRecyclerViewAdapter extends
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
-        holder.cbCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//        holder.cbCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                activity.toggleCompleted(holder.tvTitle, task.getId(), isChecked);
+//            }
+//        });
+        holder.cbCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                activity.toggleCompleted(holder.tvTitle, task.getTitle(), isChecked);
+            public void onClick(View v) {
+                activity.toggleCompleted(task.getId());
             }
         });
     }
@@ -77,12 +94,25 @@ public class TaskRecyclerViewAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION && !cbCompleted.isSelected()) {
                             listener.onItemClick(itemView, position);
                         }
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+                @Override
+                public boolean onLongClick(View v) {
+                    if (longClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            longClickListener.onItemLongClick(itemView, position);
+                        }
+                    }
+                    return true;
                 }
             });
         }
