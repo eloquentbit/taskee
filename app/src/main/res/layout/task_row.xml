@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.7"
         android:textSize="@dimen/material_component_lists_single_line_text_size"
-        android:textColor="@color/material_light_black"
+        android:textColor="@color/colorPrimaryText"
         android:layout_gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
@@ -39,8 +39,7 @@
         android:textSize="@dimen/material_typography_caption"
         android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:textColor="@color/material_blue_grey_700"
-        android:textStyle="italic"
+        android:textColor="@color/colorSecondaryText"
         tools:text="Normal"
         />
 
