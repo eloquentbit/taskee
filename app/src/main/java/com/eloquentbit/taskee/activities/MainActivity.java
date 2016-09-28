@@ -1,6 +1,5 @@
 package com.eloquentbit.taskee.activities;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -12,10 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -37,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private View positiveAction;
     private EditText edtTitle;
     private EditText edtDescription;
+    private Spinner spnPriority;
 
     private int taskId;
 
@@ -74,9 +74,11 @@ public class MainActivity extends AppCompatActivity {
                         switch (which.name()) {
                             case "POSITIVE":
                                 Task mTask = new Task();
+
                                 mTask.setId(Task.getNextId());
                                 mTask.setTitle(edtTitle.getText().toString().trim());
                                 mTask.setDescription(edtDescription.getText().toString().trim());
+                                mTask.setPriority(spnPriority.getSelectedItemPosition());
 
                                 storeOrUpdateTask(mTask, R.string.success_message_add_task);
                         }
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 });
                 edtDescription = (EditText) addTaskDialog.getCustomView().findViewById(R.id.edt_task_description);
 
+                spnPriority = (Spinner) addTaskDialog.getCustomView().findViewById(R.id.spinner_priority);
+
                 addTaskDialog.show();
                 positiveAction.setEnabled(false);
             }
@@ -124,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         // Listener for RecyclerView's item in order to edit a task
         adapter.setOnItemClickListener(new TaskRecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View itemView, int position) {
+            public void onItemClick(View itemView, final int position) {
                 final String title = ((TextView) itemView.findViewById(R.id.txt_title)).getText().toString();
 
                 // Build the Edit dialog
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         buildCustomDialog(R.string.edit_dialog_title, R.layout.fragment_task,
                                 R.string.btn_save_task, android.R.string.cancel);
 
-                // Configure callback
+                // Configure callback when user press Save button
                 editDialogBuilder.onAny(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -143,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                                 mTask.setId(taskId);
                                 mTask.setTitle(edtTitle.getText().toString().trim());
                                 mTask.setDescription(edtDescription.getText().toString().trim());
+                                mTask.setPriority(spnPriority.getSelectedItemPosition());
 
                                 storeOrUpdateTask(mTask, R.string.success_message_edit_task);
                                 break;
@@ -163,9 +168,11 @@ public class MainActivity extends AppCompatActivity {
                         taskId = mTask.getId();
                         edtTitle = (EditText) editTaskDialog.getCustomView().findViewById(R.id.edt_task_title);
                         edtDescription = (EditText) editTaskDialog.getCustomView().findViewById(R.id.edt_task_description);
+                        spnPriority = (Spinner) editTaskDialog.getCustomView().findViewById(R.id.spinner_priority);
 
                         edtTitle.setText(mTask.getTitle());
                         edtDescription.setText(mTask.getDescription());
+                        spnPriority.setSelection(mTask.getPriority());
                     }
                 });
 

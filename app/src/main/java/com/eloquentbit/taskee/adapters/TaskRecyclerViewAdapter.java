@@ -1,13 +1,9 @@
 package com.eloquentbit.taskee.adapters;
 
-import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.eloquentbit.taskee.R;
@@ -57,22 +53,11 @@ public class TaskRecyclerViewAdapter extends
     public void onBindViewHolder(final TaskRecyclerViewAdapter.TaskViewHolder holder, int position) {
         final Task task = getData().get(position);
 
-        Log.d(TAG, task.toString());
-
         holder.tvTitle.setText(task.getTitle());
         holder.cbCompleted.setChecked(task.isCompleted());
         holder.cbCompleted.setOnCheckedChangeListener(null);
+        holder.tvPriority.setText(Task.PRIORITY[task.getPriority()]);
 
-        if (task.isCompleted()) {
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }
-
-//        holder.cbCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                activity.toggleCompleted(holder.tvTitle, task.getId(), isChecked);
-//            }
-//        });
         holder.cbCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,11 +69,13 @@ public class TaskRecyclerViewAdapter extends
     class TaskViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         CheckBox cbCompleted;
+        TextView tvPriority;
 
         TaskViewHolder(final View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.txt_title);
             cbCompleted = (CheckBox) itemView.findViewById(R.id.cb_completed);
+            tvPriority = (TextView) itemView.findViewById(R.id.txt_priority);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

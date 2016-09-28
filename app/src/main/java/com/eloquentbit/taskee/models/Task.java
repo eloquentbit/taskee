@@ -1,5 +1,6 @@
 package com.eloquentbit.taskee.models;
 
+import com.eloquentbit.taskee.R;
 import com.eloquentbit.taskee.utils.RealmAutoIncrement;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ public class Task extends RealmObject {
 
     public static final String ID = "_id";
     public static final String TITLE = "title";
+    public static final int[] PRIORITY = {R.string.low_priority, R.string.normal_priority, R.string.high_priority};
 
     @Required
     @PrimaryKey
@@ -23,11 +25,11 @@ public class Task extends RealmObject {
     private String description;
     private boolean isCompleted;
     private Date dueDate;
-    private String priority;
+    private int priority;
 
     public Task() {}
 
-    public Task(String title, String description, Date dueDate, String priority) {
+    public Task(String title, String description, Date dueDate, int priority) {
         this.title = title;
         this.description = description;
         this.isCompleted = false;
@@ -75,11 +77,11 @@ public class Task extends RealmObject {
         this.dueDate = dueDate;
     }
 
-    public String getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 
