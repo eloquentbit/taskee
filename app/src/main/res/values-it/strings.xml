@@ -20,6 +20,6 @@
     <string name="success_message_delete_task">Attività eliminata</string>
     <string name="high_priority">Alta</string>
     <string name="low_priority">Bassa</string>
-    <string name="normal_priority">Normale</string>
+    <string name="medium_priority">Media</string>
     <string name="spinner_priority_title">Priorità</string>
 </resources>

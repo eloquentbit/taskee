@@ -32,11 +32,11 @@
     <!-- Spinner -->
     <string name="spinner_priority_title">Priority</string>
     <string name="low_priority">Low</string>
-    <string name="normal_priority">Normal</string>
+    <string name="medium_priority">Medium</string>
     <string name="high_priority">High</string>
     <string-array name="priority_array">
         <item>@string/low_priority</item>
-        <item>@string/normal_priority</item>
+        <item>@string/medium_priority</item>
         <item>@string/high_priority</item>
     </string-array>
 

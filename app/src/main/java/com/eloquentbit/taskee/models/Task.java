@@ -13,7 +13,7 @@ public class Task extends RealmObject {
 
     public static final String ID = "_id";
     public static final String TITLE = "title";
-    public static final int[] PRIORITY = {R.string.low_priority, R.string.normal_priority, R.string.high_priority};
+    public static final int[] PRIORITY = {R.string.low_priority, R.string.medium_priority, R.string.high_priority};
 
     @Required
     @PrimaryKey
