@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eloquentbit.taskee.R;
@@ -56,7 +57,17 @@ public class TaskRecyclerViewAdapter extends
         holder.tvTitle.setText(task.getTitle());
         holder.cbCompleted.setChecked(task.isCompleted());
         holder.cbCompleted.setOnCheckedChangeListener(null);
-        holder.tvPriority.setText(Task.PRIORITY[task.getPriority()]);
+
+        switch (task.getPriority()) {
+            case 0:
+                holder.imgPriority.setImageResource(R.drawable.ic_action_flag_low_priority);
+                break;
+            case 1:
+                holder.imgPriority.setImageResource(R.drawable.ic_action_flag_medium_priority);
+                break;
+            case 2:
+                holder.imgPriority.setImageResource(R.drawable.ic_action_flag_high_priority);
+        }
 
         holder.cbCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,13 +80,14 @@ public class TaskRecyclerViewAdapter extends
     class TaskViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         CheckBox cbCompleted;
-        TextView tvPriority;
+        ImageView imgPriority;
 
         TaskViewHolder(final View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.txt_title);
             cbCompleted = (CheckBox) itemView.findViewById(R.id.cb_completed);
-            tvPriority = (TextView) itemView.findViewById(R.id.txt_priority);
+            imgPriority = (ImageView) itemView.findViewById(R.id.img_priority);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
