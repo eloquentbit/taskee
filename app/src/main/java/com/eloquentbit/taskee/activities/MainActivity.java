@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,10 +23,15 @@ import com.eloquentbit.taskee.R;
 import com.eloquentbit.taskee.adapters.DividerItemDecoration;
 import com.eloquentbit.taskee.adapters.TaskRecyclerViewAdapter;
 import com.eloquentbit.taskee.models.Task;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import org.joda.time.LocalDate;
 
 import io.realm.Realm;
+import io.realm.Sort;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements DatePickerDialog.OnDateSetListener {
     private final String TAG = MainActivity.class.getCanonicalName();
 
     private Realm realm;
@@ -115,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -122,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         final TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter(this,
                 realm.where(Task.class)
                         .equalTo("isCompleted", false)
-                        .findAllSortedAsync(Task.ID));
+                        .findAllAsync().sort(Task.PRIORITY, Sort.DESCENDING));
 
         // Listener for RecyclerView's item in order to edit a task
         adapter.setOnItemClickListener(new TaskRecyclerViewAdapter.OnItemClickListener() {
@@ -131,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 final String title = ((TextView) itemView.findViewById(R.id.txt_title)).getText().toString();
 
                 // Build the Edit dialog
-                MaterialDialog.Builder editDialogBuilder =
+                final MaterialDialog.Builder editDialogBuilder =
                         buildCustomDialog(R.string.edit_dialog_title, R.layout.fragment_task,
                                 R.string.btn_save_task, android.R.string.cancel);
 
@@ -141,14 +153,28 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         switch (which.name()) {
                             case "POSITIVE":
-                                Task mTask = new Task();
+                                // Load task to edit
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        Task mTask = realm.where(Task.class).equalTo(Task.ID, taskId).findFirst();
 
-                                mTask.setId(taskId);
-                                mTask.setTitle(edtTitle.getText().toString().trim());
-                                mTask.setDescription(edtDescription.getText().toString().trim());
-                                mTask.setPriority(spnPriority.getSelectedItemPosition());
+                                        mTask.setTitle(edtTitle.getText().toString().trim());
+                                        mTask.setDescription(edtDescription.getText().toString().trim());
+                                        mTask.setPriority(spnPriority.getSelectedItemPosition());
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Snackbar.make(coordinatorLayout, R.string.success_message_edit_task, Snackbar.LENGTH_SHORT).show();
+                                    }
+                                }, new Realm.Transaction.OnError() {
+                                    @Override
+                                    public void onError(Throwable error) {
+                                        Snackbar.make(coordinatorLayout, R.string.error_message_task, Snackbar.LENGTH_SHORT).show();
+                                    }
+                                });
 
-                                storeOrUpdateTask(mTask, R.string.success_message_edit_task);
                                 break;
                         }
                     }
@@ -216,6 +242,30 @@ public class MainActivity extends AppCompatActivity {
         realm.close();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
+
+        if (dpd != null) dpd.setOnDateSetListener(this);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, final int year, final int monthOfYear, final int dayOfMonth) {
+
+        final int month = monthOfYear + 1;
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Task mTask = realm.where(Task.class).equalTo(Task.ID, taskId).findFirst();
+
+                LocalDate dueDate = new LocalDate(year, month, dayOfMonth);
+
+                mTask.setDueDate(dueDate.toString());
+            }
+        });
+    }
 
     public void toggleCompleted(final Integer taskId) {
 
@@ -256,44 +306,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    public void editTask(String title) {
-//
-//        final Task editTask = realm.where(Task.class).equalTo(Task.TITLE, title)
-//                .findFirst();
-//
-//        MaterialDialog editTaskDialog = new MaterialDialog.Builder(MainActivity.this)
-//                .title(R.string.edit_dialog_title)
-//                .customView(R.layout.fragment_task, true)
-//                .positiveText(R.string.btn_save_task)
-//                .negativeText(R.string.btn_delete_task)
-//                .neutralText(android.R.string.cancel)
-//                .onAny(new MaterialDialog.SingleButtonCallback() {
-//
-//                    @Override
-//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                        switch (which.name()) {
-//                            case "NEGATIVE":
-//                                deleteTask(editTask.getTitle());
-//                                break;
-//                            case "POSITIVE":
-//
-//                                break;
-//                            case "NEUTRAL":
-//                                Log.d(TAG, "NEUTRAL clicked");
-//                                break;
-//                        }
-//                    }
-//                })
-//                .build();
-//
-//        edtTitle = (EditText) editTaskDialog.getCustomView().findViewById(R.id.edt_task_title);
-//        edtDescription = (EditText) editTaskDialog.getCustomView().findViewById(R.id.edt_task_description);
-//        edtTitle.setText(editTask.getTitle());
-//        edtDescription.setText(editTask.getDescription());
-//
-//        editTaskDialog.show();
-//    }
-
     public void deleteTask(final Integer id, final int successMessageResource) {
 
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -311,6 +323,43 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void showCalendar(Integer taskId) {
+        this.taskId = taskId;
+        LocalDate now = LocalDate.now();
+
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                MainActivity.this,
+                now.getYear(),
+                now.getMonthOfYear() - 1,
+                now.getDayOfMonth()
+        );
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    public void removeDueDate(final Integer taskId) {
+
+        new MaterialDialog.Builder(MainActivity.this)
+                .content(R.string.message_remove_due_date)
+                .positiveText(R.string.btn_clear_due_date)
+                .negativeText(R.string.btn_cancel_operation)
+                .onAny(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        switch (which.name()) {
+                            case "POSITIVE":
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        Task mTak = realm.where(Task.class).equalTo(Task.ID, taskId).findFirst();
+                                        mTak.setDueDate("");
+                                    }
+                                });
+                        }
+                    }
+                })
+                .show();
+    }
+
     private MaterialDialog.Builder buildCustomDialog(int titleResource,
                                                      int customViewResource,
                                                      int positiveTextResource,
@@ -322,4 +371,5 @@ public class MainActivity extends AppCompatActivity {
                 .positiveText(positiveTextResource)
                 .negativeText(negativeTextResource);
     }
+
 }

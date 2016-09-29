@@ -22,4 +22,7 @@
     <string name="low_priority">Bassa</string>
     <string name="medium_priority">Media</string>
     <string name="spinner_priority_title">Priorità</string>
+    <string name="mi_completed_tasks">Task Completati</string>
+    <string name="btn_clear_due_date">Rimuovi</string>
+    <string name="message_remove_due_date">Rimuovere la pianificazione?</string>
 </resources>

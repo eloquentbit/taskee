@@ -7,6 +7,7 @@
     <string name="add_dialog_title">New Task</string>
     <string name="edit_dialog_title">Edit Task</string>
     <string name="delete_dialog_title">Delete Task</string>
+    <string name="remove_due_date_title">Clear Due Date</string>
 
     <!-- Hints -->
     <string name="hint_task_title">Title</string>
@@ -16,6 +17,7 @@
     <string name="btn_save_task">Save</string>
     <string name="btn_delete_task">Delete</string>
     <string name="btn_cancel_operation">Cancel</string>
+    <string name="btn_clear_due_date">Clear</string>
 
     <!-- Messages -->
     <string name="success_message_add_task">Task added successfully</string>
@@ -34,6 +36,7 @@
     <string name="low_priority">Low</string>
     <string name="medium_priority">Medium</string>
     <string name="high_priority">High</string>
+    <string name="mi_completed_tasks">Completed Tasks</string>
     <string-array name="priority_array">
         <item>@string/low_priority</item>
         <item>@string/medium_priority</item>

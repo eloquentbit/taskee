@@ -1,9 +1,6 @@
 package com.eloquentbit.taskee.models;
 
-import com.eloquentbit.taskee.R;
 import com.eloquentbit.taskee.utils.RealmAutoIncrement;
-
-import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -13,23 +10,22 @@ public class Task extends RealmObject {
 
     public static final String ID = "_id";
     public static final String TITLE = "title";
-    public static final int[] PRIORITY = {R.string.low_priority, R.string.medium_priority, R.string.high_priority};
+    public static final String PRIORITY = "priority";
 
     @Required
     @PrimaryKey
-    //private Integer _id = RealmAutoIncrement.getInstance().getNextIdFromModel(Task.class);
     private Integer _id;
 
     @Required
     private String title;
     private String description;
     private boolean isCompleted;
-    private Date dueDate;
+    private String dueDate;
     private int priority;
 
     public Task() {}
 
-    public Task(String title, String description, Date dueDate, int priority) {
+    public Task(String title, String description, String dueDate, int priority) {
         this.title = title;
         this.description = description;
         this.isCompleted = false;
@@ -69,11 +65,11 @@ public class Task extends RealmObject {
         this.isCompleted = completed;
     }
 
-    public Date getDueDate() {
+    public String getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -90,6 +86,7 @@ public class Task extends RealmObject {
     }
 
     public String toString() {
-        return (this.getId() + " - " + this.getTitle() + " - " + this.isCompleted());
+        return (this.getId() + " - " + this.getTitle() + " - " + this.isCompleted() + " - "
+                + " - " + this.getPriority() + " - " + this.getDueDate());
     }
 }

@@ -3,6 +3,8 @@ package com.eloquentbit.taskee;
 import android.app.Application;
 import android.content.Context;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -14,6 +16,7 @@ public class TaskeeApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        JodaTimeAndroid.init(this);
         application = this;
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)

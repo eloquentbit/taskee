@@ -8,4 +8,5 @@
     <string name="btn_save_task">Save</string>
     <string name="edit_dialog_title">Edit Task</string>
     <string name="btn_delete_task">Delete</string>
+    <string name="mi_completed_tasks">Completed Tasks</string>
 </resources>

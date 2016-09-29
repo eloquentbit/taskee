@@ -1,15 +1,22 @@
 package com.eloquentbit.taskee.adapters;
 
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eloquentbit.taskee.R;
 import com.eloquentbit.taskee.activities.MainActivity;
 import com.eloquentbit.taskee.models.Task;
+
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -58,6 +65,11 @@ public class TaskRecyclerViewAdapter extends
         holder.cbCompleted.setChecked(task.isCompleted());
         holder.cbCompleted.setOnCheckedChangeListener(null);
 
+        String formattedDate = formatDateView(task.getDueDate());
+        holder.tvDueDate.setText(formattedDate);
+
+        holder.tvDueDate.setPaintFlags(holder.tvDueDate.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         switch (task.getPriority()) {
             case 0:
                 holder.imgPriority.setImageResource(R.drawable.ic_action_flag_low_priority);
@@ -75,18 +87,46 @@ public class TaskRecyclerViewAdapter extends
                 activity.toggleCompleted(task.getId());
             }
         });
+
+        holder.btnDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.showCalendar(task.getId());
+            }
+        });
+
+        holder.tvDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.removeDueDate(task.getId());
+            }
+        });
+    }
+
+    private String formatDateView(String date) {
+        if (date != null && !date.isEmpty()) {
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-M-d");
+            LocalDate dueDate = LocalDate.parse(date, fmt);
+            return dueDate.toString("d MMM");
+        } else {
+            return "";
+        }
     }
 
     class TaskViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         CheckBox cbCompleted;
         ImageView imgPriority;
+        ImageButton btnDueDate;
+        TextView tvDueDate;
 
         TaskViewHolder(final View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.txt_title);
             cbCompleted = (CheckBox) itemView.findViewById(R.id.cb_completed);
             imgPriority = (ImageView) itemView.findViewById(R.id.img_priority);
+            btnDueDate = (ImageButton) itemView.findViewById(R.id.btn_due_date);
+            tvDueDate = (TextView) itemView.findViewById(R.id.txt_due_date);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {

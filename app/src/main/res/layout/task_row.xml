@@ -31,6 +31,24 @@
         tools:text="Learn Android"
         />
 
+    <TextView
+        android:id="@+id/txt_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingRight="8dp"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="@dimen/material_typography_caption"
+        tools:text="09/30"/>
+
+    <ImageButton
+        android:id="@+id/btn_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Set Due Date"
+        android:src="@drawable/ic_action_calendar"
+        android:background="?android:colorBackground"/>
+
     <ImageView
         android:id="@+id/img_priority"
         android:layout_width="wrap_content"
