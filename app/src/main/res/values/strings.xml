@@ -24,7 +24,7 @@
     <string name="success_message_edit_task">Task updated successfully</string>
     <string name="success_message_delete_task">Task deleted successfully</string>
     <string name="error_message_task">Failed to add task</string>
-
+    <string name="message_remove_due_date">Clear the due date?</string>
     <string name="message_delete_task">Are you sure you want to delete this task?</string>
 
     <!-- SnackBar -->
