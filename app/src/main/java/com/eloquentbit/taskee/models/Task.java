@@ -11,6 +11,7 @@ public class Task extends RealmObject {
     public static final String ID = "_id";
     public static final String TITLE = "title";
     public static final String PRIORITY = "priority";
+    public static final String COMPLETED = "isCompleted";
 
     @Required
     @PrimaryKey
@@ -86,7 +87,7 @@ public class Task extends RealmObject {
     }
 
     public String toString() {
-        return (this.getId() + " - " + this.getTitle() + " - " + this.isCompleted() + " - "
-                + " - " + this.getPriority() + " - " + this.getDueDate());
+        return (this.getId() + " - " + this.getTitle() + " - " + this.isCompleted() +
+                " - " + this.getPriority() + " - " + this.getDueDate());
     }
 }
