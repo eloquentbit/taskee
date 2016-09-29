@@ -29,5 +29,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.afollestad.material-dialogs:core:0.9.0.2'
     compile 'com.dmitrymalkovich.android:material-design-dimens:1.4'
+    compile 'com.wdullaer:materialdatetimepicker:2.5.0'
+    compile 'net.danlew:android.joda:2.9.4.1'
     testCompile 'junit:junit:4.12'
 }
