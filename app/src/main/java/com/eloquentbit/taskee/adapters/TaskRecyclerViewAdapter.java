@@ -60,7 +60,7 @@ public class TaskRecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(final TaskRecyclerViewAdapter.TaskViewHolder holder, int position) {
         final Task task = getData().get(position);
-
+        
         holder.tvTitle.setText(task.getTitle());
         holder.cbCompleted.setChecked(task.isCompleted());
         holder.cbCompleted.setOnCheckedChangeListener(null);

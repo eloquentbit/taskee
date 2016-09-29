@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity
         // Load active tasks
         final TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter(this,
                 realm.where(Task.class)
-                        .equalTo("isCompleted", false)
-                        .findAllAsync().sort(Task.PRIORITY, Sort.DESCENDING));
+                        .equalTo(Task.COMPLETED, false)
+                        .findAllSortedAsync(Task.COMPLETED, Sort.DESCENDING));
 
         // Listener for RecyclerView's item in order to edit a task
         adapter.setOnItemClickListener(new TaskRecyclerViewAdapter.OnItemClickListener() {
