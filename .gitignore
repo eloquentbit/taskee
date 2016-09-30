@@ -40,6 +40,10 @@ captures/
 *.iml
 .idea/workspace.xml
 .idea/libraries
+.idea/misc.xml
+.idea/encodings.xml
+.idea/.name
+projectFilesBackup/
 
 # Keystore files
 *.jks

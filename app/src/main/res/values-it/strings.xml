@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Taskee</string>
+    <string name="add_dialog_title">Nuova Attività</string>
+    <string name="add_task_header">Aggiungi Attività</string>
+    <string name="btn_add_task">Aggiungi</string>
+    <string name="btn_delete_task">Elimina</string>
+    <string name="btn_save_task">Salva</string>
+    <string name="edit_dialog_title">Modifica Attività</string>
+    <string name="error_message_task">Impossibile aggiungere il task</string>
+    <string name="hint_task">Attività</string>
+    <string name="hint_task_title">Titolo</string>
+    <string name="message_task_completed">Attività completata</string>
+    <string name="success_message_add_task">Attività aggiunta</string>
+    <string name="hint_task_description">Descrizione</string>
+    <string name="success_message_edit_task">Attività modificata</string>
+    <string name="btn_cancel_operation">Annulla</string>
+    <string name="delete_dialog_title">Elimina Attività</string>
+    <string name="message_delete_task">Sei sicuro di voler eliminare l\'attività?</string>
+    <string name="success_message_delete_task">Attività eliminata</string>
+    <string name="high_priority">Alta</string>
+    <string name="low_priority">Bassa</string>
+    <string name="medium_priority">Media</string>
+    <string name="spinner_priority_title">Priorità</string>
+    <string name="mi_completed_tasks">Task Completati</string>
+    <string name="btn_clear_due_date">Rimuovi</string>
+    <string name="message_remove_due_date">Rimuovere la pianificazione?</string>
+    <string name="completed_task_activity_title">Attività completate</string>
+    <string name="mi_delete_completed_tasks">Cancella attività completate</string>
+    <string name="remove_due_date_title">Rimuovi pianificazione</string>
+</resources>
