@@ -128,7 +128,6 @@ public class TaskRecyclerViewAdapter extends
         ImageButton btnDueDate;
         ImageView imgPriority;
 
-
         TaskViewHolder(final View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.txt_title);
@@ -137,7 +136,6 @@ public class TaskRecyclerViewAdapter extends
             btnDueDate = (ImageButton) itemView.findViewById(R.id.btn_due_date);
             tvDueDate = (TextView) itemView.findViewById(R.id.txt_due_date);
             tvDescription = (TextView) itemView.findViewById(R.id.txt_description);
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
