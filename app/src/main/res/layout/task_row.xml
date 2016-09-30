@@ -1,59 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingTop="@dimen/material_layout_keylines_screen_edge_margin"
+    android:padding="8dp"
     android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/cb_completed"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
-        android:layout_gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        tools:ignore="RtlHardcoded"
         />
 
     <TextView
         android:id="@+id/txt_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.7"
+        android:layout_toRightOf="@id/cb_completed"
+        android:layout_marginLeft="12dp"
         android:textSize="@dimen/material_component_lists_single_line_text_size"
         android:textColor="@color/colorPrimaryText"
-        android:layout_gravity="center_vertical"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         tools:text="Learn Android"
+        tools:ignore="RtlHardcoded"
+        />
+
+    <TextView
+        android:id="@+id/txt_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/txt_title"
+        android:layout_alignLeft="@id/txt_title"
+        android:layout_marginTop="24dp"
+        android:linksClickable="true"
+        android:autoLink="all"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="@dimen/material_typography_caption"
+        tools:text="Task description"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/img_priority"
+        android:layout_centerVertical="true"
+        android:contentDescription="Set Due Date"
+        android:src="@drawable/ic_action_calendar"
+        android:background="?android:colorBackground"
+        tools:ignore="RtlHardcoded"
+        />
+
+    <ImageView
+        android:id="@+id/img_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="Task priority"
+        tools:src="@drawable/ic_action_flag_high_priority"
+        tools:ignore="RtlHardcoded"
         />
 
     <TextView
         android:id="@+id/txt_due_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_alignBaseline="@id/txt_title"
+        android:layout_toLeftOf="@id/btn_due_date"
         android:paddingRight="8dp"
         android:textColor="@color/colorSecondaryText"
         android:textSize="@dimen/material_typography_caption"
-        tools:text="09/30"/>
+        android:visibility="gone"
+        tools:text="09 Sep"
+        tools:visibility="visible"
+        tools:ignore="RtlHardcoded"
+        />
 
-    <ImageButton
-        android:id="@+id/btn_due_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Set Due Date"
-        android:src="@drawable/ic_action_calendar"
-        android:background="?android:colorBackground"/>
-
-    <ImageView
-        android:id="@+id/img_priority"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Task priority"
-        android:layout_gravity="center_vertical"/>
-
-</LinearLayout>
+</RelativeLayout>
