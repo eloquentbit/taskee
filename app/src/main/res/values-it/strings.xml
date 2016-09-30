@@ -25,4 +25,7 @@
     <string name="mi_completed_tasks">Task Completati</string>
     <string name="btn_clear_due_date">Rimuovi</string>
     <string name="message_remove_due_date">Rimuovere la pianificazione?</string>
+    <string name="completed_task_activity_title">Attività completate</string>
+    <string name="mi_delete_completed_tasks">Cancella attività completate</string>
+    <string name="remove_due_date_title">Rimuovi pianificazione</string>
 </resources>

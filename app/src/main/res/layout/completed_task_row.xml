@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
+        android:textSize="@dimen/material_component_lists_single_line_text_size"
+        android:textColor="@color/colorPrimaryText"
+        tools:text="Learn Android"
+        tools:ignore="RtlHardcoded"
+        />
+
+    <TextView
+        android:id="@+id/txt_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/txt_title"
+        android:layout_alignLeft="@id/txt_title"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="@dimen/material_typography_caption"
+        tools:text="Task description"
+        tools:ignore="RtlHardcoded"
+        />
+
+
+    <ImageView
+        android:id="@+id/img_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Task priority"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        tools:src="@drawable/ic_action_flag_medium_priority"
+        tools:ignore="RtlHardcoded"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_undo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/img_priority"
+        android:layout_centerVertical="true"
+        android:contentDescription="Mark as incompleted"
+        android:src="@drawable/ic_action_undo"
+        android:background="?android:colorBackground"
+        tools:src="@drawable/ic_action_undo"
+        tools:ignore="RtlHardcoded"
+        />
+
+    <TextView
+        android:id="@+id/txt_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_undo"
+        android:layout_alignBaseline="@id/txt_title"
+        android:paddingRight="8dp"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="@dimen/material_typography_caption"
+        android:visibility="gone"
+        tools:text="09 Sep"
+        tools:visibility="visible"
+        tools:ignore="RtlHardcoded"
+        />
+
+</RelativeLayout>
