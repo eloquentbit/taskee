@@ -1,5 +1,7 @@
 package com.eloquentbit.taskee.activities;
 
+import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -127,6 +130,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.miCompleted:
+                showCompletedTasks();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -134,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         final TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter(this,
                 realm.where(Task.class)
                         .equalTo(Task.COMPLETED, false)
-                        .findAllSorted(Task.COMPLETED, Sort.DESCENDING));
+                        .findAllSorted(Task.PRIORITY, Sort.DESCENDING));
 
         // Listener for RecyclerView's item in order to edit a task
         adapter.setOnItemClickListener(new TaskRecyclerViewAdapter.OnItemClickListener() {
@@ -284,6 +298,11 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(coordinatorLayout, R.string.message_task_completed, Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void showCompletedTasks() {
+        Intent intent = new Intent(this, CompletedTasksActivity.class);
+        startActivity(intent);
     }
 
     public void storeOrUpdateTask(final Task task, final int successMessageResource) {
