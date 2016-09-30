@@ -17,6 +17,7 @@ import com.eloquentbit.taskee.models.Task;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.w3c.dom.Text;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -64,9 +65,15 @@ public class TaskRecyclerViewAdapter extends
         holder.tvTitle.setText(task.getTitle());
         holder.cbCompleted.setChecked(task.isCompleted());
         holder.cbCompleted.setOnCheckedChangeListener(null);
+        holder.tvDescription.setText(task.getDescription());
 
-        String formattedDate = formatDateView(task.getDueDate());
-        holder.tvDueDate.setText(formattedDate);
+        if (task.getDueDate() != null && !task.getDueDate().isEmpty()) {
+            String formattedDate = formatDateView(task.getDueDate());
+            holder.tvDueDate.setVisibility(View.VISIBLE);
+            holder.tvDueDate.setText(formattedDate);
+        } else {
+            holder.tvDueDate.setVisibility(View.GONE);
+        }
 
         holder.tvDueDate.setPaintFlags(holder.tvDueDate.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -114,11 +121,13 @@ public class TaskRecyclerViewAdapter extends
     }
 
     class TaskViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle;
         CheckBox cbCompleted;
-        ImageView imgPriority;
-        ImageButton btnDueDate;
+        TextView tvTitle;
+        TextView tvDescription;
         TextView tvDueDate;
+        ImageButton btnDueDate;
+        ImageView imgPriority;
+
 
         TaskViewHolder(final View itemView) {
             super(itemView);
@@ -127,6 +136,7 @@ public class TaskRecyclerViewAdapter extends
             imgPriority = (ImageView) itemView.findViewById(R.id.img_priority);
             btnDueDate = (ImageButton) itemView.findViewById(R.id.btn_due_date);
             tvDueDate = (TextView) itemView.findViewById(R.id.txt_due_date);
+            tvDescription = (TextView) itemView.findViewById(R.id.txt_description);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
