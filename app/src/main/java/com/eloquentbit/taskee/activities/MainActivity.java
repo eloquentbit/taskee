@@ -1,6 +1,5 @@
 package com.eloquentbit.taskee.activities;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -69,7 +68,6 @@ public class MainActivity extends AppCompatActivity
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 final MaterialDialog.Builder addDialogBuilder =
                         buildCustomDialog(R.string.add_dialog_title,
                                 R.layout.fragment_task,

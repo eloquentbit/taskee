@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -37,26 +36,10 @@ public class CompletedTasksActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         realm = Realm.getDefaultInstance();
 
         recyclerView = (RecyclerView) findViewById(R.id.rv_completed_task);
         setupRecyclerView();
-    }
-
-    private void setupRecyclerView() {
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Load active tasks
-        final CompletedTaskRecyclerViewAdapter adapter = new CompletedTaskRecyclerViewAdapter(this,
-                realm.where(Task.class)
-                        .equalTo(Task.COMPLETED, true)
-                        .findAllSorted(Task.COMPLETED, Sort.DESCENDING));
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     }
 
     @Override
@@ -76,6 +59,27 @@ public class CompletedTasksActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }
+
+    private void setupRecyclerView() {
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Load active tasks
+        final CompletedTaskRecyclerViewAdapter adapter = new CompletedTaskRecyclerViewAdapter(this,
+                realm.where(Task.class)
+                        .equalTo(Task.COMPLETED, true)
+                        .findAllSorted(Task.COMPLETED, Sort.DESCENDING));
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    }
+
     private void deleteCompletedTasks() {
 
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -87,12 +91,6 @@ public class CompletedTasksActivity extends AppCompatActivity {
                         .deleteAllFromRealm();
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        realm.close();
     }
 
     public void markTaskIncomplete(final Integer taskId) {
