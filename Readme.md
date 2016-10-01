@@ -30,6 +30,8 @@ The following **additional** features are implemented:
 * [x] User can see all completed todos in a second Activity
 * [x] User can choose to mark as incomplete a previous completed todo
 * [x] User can delete all completed todos
+* [x] Available translation:
+ - Italian
 
 ## Video Walkthrough 
 
